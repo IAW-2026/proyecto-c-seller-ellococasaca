@@ -24,3 +24,9 @@ Aplicación web desarrollada con **Next.js** para la gestión de productos de ve
 
 ## ACLARACIONES IMPORTANTES:
 Dentro de la carpeta **seller-app**, ver el documento **CONSIDERACIONES.md** para conocer las distintas limitaciones del proyecto.
+
+## CREDENCIALES
+- Link de la aplicación: https://proyecto-c-seller-ellococasaca.vercel.app/
+- Las credencial del usuario vendedor fue creada acorde a lo especificado en los requisitos: 
+- Usuario: seller+clerk_test@iaw.com
+- Passowrd: iawuser#
