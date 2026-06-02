@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { ClerkProvider, Show, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Package, Shirt, Star, Truck } from 'lucide-react';
+import { DollarSign, Package, Shirt, Star, Truck } from 'lucide-react';
 import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] });
@@ -56,6 +56,13 @@ export default function RootLayout({
                   >
                     <Truck className="w-4 h-4" />
                     <span className="hidden sm:inline">Tus Envíos</span>
+                  </Link>
+                  <Link
+                    href="/dashboard/payments"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <DollarSign className="w-4 h-4" />
+                    <span className="hidden sm:inline">Tus Pagos</span>
                   </Link>
                   <header className="flex justify-end items-center p-4 gap-4 h-16">
                     <Show when="signed-out">
