@@ -20,10 +20,10 @@ export const ProductSchema = z.object({
   description: z.string().optional(), //Optional.
   price: z.coerce.number().positive("El número debe ser mayor que cero."),
   stock: z.coerce.number().int().nonnegative("El número debe ser un entero no negativo."),
-  categoryId: z.string().optional(), //Optional.
+  categoryId: z.string(),
   version: z.enum(["RETRO", "HOME", "AWAY"]),
-  season: z.string().optional(),
-  team: z.string().optional(),
-  size: z.string().optional(),
+  season: z.string(),
+  team: z.string(),
+  size: z.string(),
   createdAt: z.date().optional(),
 });

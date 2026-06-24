@@ -5,6 +5,8 @@ import { ProductSchema, ProductState } from "@/src/lib/schemas";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { uploadImage } from "./upload-images";
+import { deleteImage } from "./delete-images";
 
 export async function editProduct(prevState: ProductState, formData: FormData) {
   //Clerk authentication first. If not, throw an error.
@@ -40,11 +42,18 @@ export async function editProduct(prevState: ProductState, formData: FormData) {
 
   const { title, description, price, stock, categoryId, version, season, team, size } = validatedFields.data;
 
-  const productId = formData.get("id") as string; // Ensure the ID is passed in the form data and is a string.
+  //Ensure the ID is passed in the form data and is a string.
+  const productId = formData.get("id") as string; 
+
+  //Get product image.
+  const imageFile = formData.get("images") as File;
 
   try {
     const product = await prisma.product.findUnique({
       where: { id: productId },
+      include: {
+        ProductImage: true,
+      },
     });
 
     if (!product || product.sellerId !== userId) {
@@ -65,6 +74,32 @@ export async function editProduct(prevState: ProductState, formData: FormData) {
           size: size,
         }
     });
+
+    //Manage image update, if seller updates it.
+    if (imageFile && imageFile.size > 0) {
+      //If an image exists, we delete it from DB and Cloudinary.
+      if (product.ProductImage.length > 0) {
+        await deleteImage(
+          product.ProductImage[0].url
+        );
+        await prisma.productImage.delete({
+          where: {
+            id: product.ProductImage[0].id
+          },
+        });
+      }
+
+      //Upload new image to DB and Cloudinary.
+      const imageUrl = await uploadImage(imageFile, productId);
+
+      await prisma.productImage.create({
+        data: {
+          id: crypto.randomUUID(),
+          url: imageUrl,
+          productId,
+        },
+      });
+    }
   } catch (error) {
     console.error("Update product error:", error);
     return {

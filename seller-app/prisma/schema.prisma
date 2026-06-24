@@ -19,16 +19,16 @@ model Product {
   description  String?
   price        Float
   stock        Int
-  categoryId   String?
-  season       String?
-  team         String?
-  size         String?
+  categoryId   String
+  season       String
+  team         String
+  size         String
   version      ProductVersion
   createdAt    DateTime       @default(now())
-  Category     Category?      @relation(fields: [categoryId], references: [id])
+  Category     Category       @relation(fields: [categoryId], references: [id])
   User         User           @relation(fields: [sellerId], references: [clerkId])
   ProductImage ProductImage[]
-  Sales        Sales[]
+  Sales        OrderDetail[]
 }
 
 model ProductImage {
@@ -38,15 +38,27 @@ model ProductImage {
   Product   Product @relation(fields: [productId], references: [id])
 }
 
-model Sales {
-  id         String      @id
+model Order {
+  id           String        @id @default(uuid())
+  buyerId      String
+  sellerId     String
+  Seller       User          @relation(fields: [sellerId], references: [clerkId])
+  totalPrice   Float
+  status       OrderStatus   @default(PENDING)
+  createdAt    DateTime      @default(now())
+  OrderDetails OrderDetail[]
+}
+
+model OrderDetail {
+  id         String   @id @default(uuid())
   productId  String
-  buyerId    String
+  orderId    String
   quantity   Int
-  status     OrderStatus @default(PENDING)
+  unitPrice  Float?
   totalPrice Float
-  createdAt  DateTime    @default(now())
-  Product    Product     @relation(fields: [productId], references: [id])
+  createdAt  DateTime @default(now())
+  Product    Product  @relation(fields: [productId], references: [id])
+  Order      Order    @relation(fields: [orderId], references: [id])
 }
 
 model User {
@@ -57,12 +69,15 @@ model User {
   isVerified  Boolean   @default(false)
   createdAt   DateTime  @default(now())
   Product     Product[]
+  orders      Order[]
 }
 
 enum OrderStatus {
   PENDING
   PREPARED
   SHIPPED
+  IN_TRANSIT
+  DELIVERED
 }
 
 enum ProductVersion {
