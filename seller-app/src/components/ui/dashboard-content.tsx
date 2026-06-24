@@ -1,14 +1,4 @@
-import { 
-  Package, 
-  Star, 
-  Truck, 
-  TrendingUp, 
-  DollarSign, 
-  ShoppingBag,
-  Clock,
-  CheckCircle,
-  AlertCircle
-} from "lucide-react"
+import { Package, Star, Truck, TrendingUp, DollarSign, ShoppingBag, PackagePlus, Clock, CheckCircle, AlertCircle } from "lucide-react"
 import Link from "next/link"
 
 function StatCard({ 
@@ -28,10 +18,10 @@ function StatCard({
     <div className="bg-white rounded-xl p-6 shadow-xl shadow-blue-900/5">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+          <p className="text-xs uppercase tracking-[0.25em] font-black text-gray-400">{title}</p>
+          <p className="text-3xl font-bold font-black text-gray-900 mt-1">{value}</p>
           {trend && (
-            <p className={`text-sm mt-1 flex items-center gap-1 ${trendUp ? 'text-green-600' : 'text-red-500'}`}>
+            <p className={`text-xs uppercase mt-1 flex items-center gap-1 ${trendUp ? 'text-green-600' : 'text-red-500'}`}>
               <TrendingUp className={`w-3 h-3 ${!trendUp && 'rotate-180'}`} />
               {trend}
             </p>
@@ -123,9 +113,22 @@ export function DashboardContent() {
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Bienvenido de vuelta, Vendedor</h1>
-        <p className="text-gray-500 mt-1">Aqui tienes un resumen de tus ventas</p>
+      <div className="mb-10 bg-blue-600 rounded-[2.5rem] p-10 text-white shadow-xl shadow-blue-900/10">
+        <p className="text-sm uppercase tracking-[0.3em] font-black text-blue-200">
+          BIENVENIDO DE VUELTA
+        </p>
+        <h1 className="mt-2 text-5xl font-black uppercase italic tracking-tight">
+          VESTÍ TU PASIÓN
+        </h1>
+        <p className="mt-4 text-lg text-blue-100 max-w-2xl">
+          Gestioná tu catálogo, ventas y pedidos desde un único lugar.
+        </p>
+        <Link
+          href="/dashboard/products/create"
+          className="mt-6 inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-2xl font-black hover:bg-gray-100 transition-colors">
+          <PackagePlus />
+          Crear Producto
+        </Link>
       </div>
 
       {/* Stats Grid */}
@@ -148,6 +151,8 @@ export function DashboardContent() {
           title="Pedidos Pendientes" 
           value="8" 
           icon={ShoppingBag}
+          trend="+2 nuevos"
+          trendUp
         />
         <StatCard 
           title="Calificacion Promedio" 
@@ -160,37 +165,38 @@ export function DashboardContent() {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Acciones Rapidas</h2>
+        <h2 className="text-3xl font-black uppercase italic tracking-tight text-gray-900 mb-6">
+          Centro de Control
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <QuickActionCard 
-            title="Agregar Producto"
-            description="Sube un nuevo producto a tu catalogo"
+            title="Ver Productos"
+            description="Gestiona los productos de tu catálogo"
             icon={Package}
-            href="/dashboard/products/create"
+            href="/dashboard/products"
             primary
           />
           <QuickActionCard 
-            title="Ver Resenas"
+            title="Ver Reseñas"
             description="Revisa lo que dicen tus clientes"
             icon={Star}
-            href="/dashboard/reviews"
+            href="/dashboard/feedbacks"
           />
           <QuickActionCard 
-            title="Gestionar Envios"
+            title="Gestionar Envíos"
             description="Actualiza el estado de tus pedidos"
             icon={Truck}
-            href="/dashboard/shipments"
+            href="/dashboard/orders"
           />
         </div>
       </div>
 
       {/* Recent Orders & Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Orders */}
         <div className="bg-white rounded-xl p-6 shadow-xl shadow-blue-900/5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Pedidos Recientes</h2>
-            <Link href="/envios" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <Link href="dashboard/orders" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               Ver todos
             </Link>
           </div>
