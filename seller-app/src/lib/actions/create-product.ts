@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { ProductSchema, ProductState } from "@/src/lib/schemas";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadImage } from "./upload-images";
@@ -14,6 +14,32 @@ export async function createProduct(prevState: ProductState, formData: FormData)
   if (!userId) {
     throw new Error("Unauthorized");
   }
+
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) {
+    throw new Error("Unauthorized");
+  }
+
+  const email =
+    clerkUser.emailAddresses[0]?.emailAddress ?? null;
+
+  const name = [clerkUser.firstName, clerkUser.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim() || null;
+
+  await prisma.user.upsert({
+    where: { clerkId: userId },
+    update: { email, name },
+    create: {
+      clerkId: userId,
+      email,
+      name,
+    },
+  });
+
+  console.log(userId);
 
   //Validate fields.
   const validatedFields = ProductSchema.safeParse({
