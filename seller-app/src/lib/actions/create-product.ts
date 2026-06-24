@@ -5,6 +5,7 @@ import { ProductSchema, ProductState } from "@/src/lib/schemas";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { uploadImage } from "./upload-images";
 
 export async function createProduct(prevState: ProductState, formData: FormData) {
   //Clerk authentication first. If not, throw an error.
@@ -40,6 +41,18 @@ export async function createProduct(prevState: ProductState, formData: FormData)
 
   const { title, description, price, stock, categoryId, version, season, team, size } = validatedFields.data;
 
+  //Get all image files from the form data.
+  const imageFiles = formData.getAll("images") as File[];
+  console.log("Images: ", imageFiles.length);
+
+  for (const file of imageFiles) {
+    console.log(
+      `Processing file: ${file.name}, 
+      size: ${file.size}, 
+      type: ${file.type}`
+    );
+  }
+
   //Create product in DB.
   try {
       const product = await prisma.product.create({
@@ -57,6 +70,26 @@ export async function createProduct(prevState: ProductState, formData: FormData)
         sellerId: userId,
       },
     });
+    //Product created, now we can upload images and associate them with the product.
+    for (const file of imageFiles) {
+      if (file.size === 0) continue;
+
+      console.log("Uploading:", file.name);
+
+      const imageUrl = await uploadImage(
+        file,
+        product.id
+      );
+
+      await prisma.productImage.create({
+        data: {
+          id: crypto.randomUUID(),
+          url: imageUrl,
+          productId: product.id,
+        },
+      });
+    }
+    //Product and images created successfully.
     console.log("Producto creado exitosamente");
   } catch (error) {
     console.error("Create product error:", error);
