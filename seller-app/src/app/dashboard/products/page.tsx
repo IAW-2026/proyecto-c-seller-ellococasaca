@@ -1,112 +1,117 @@
-import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { deleteProduct } from "@/src/lib/actions/delete-product";
+import { PackagePlus } from "lucide-react";
+import { Suspense } from "react";
+import ProductsGrid from "@/src/components/ui/products/products-grid";
+import ProductsGridSkeleton from "@/src/components/ui/products/products-grid-skeleton";
 
-export default async function ProductsPage() {
-  const { userId } = await auth();
+type Props = {
+  searchParams: Promise<{
+    category?: string;
+    version?: string;
+    team?: string;
+    page?: string;
+  }>;
+};
 
-  if (!userId) {
-    redirect("/sign-in");
-  }
+export default async function ProductsPage(
+  { searchParams }: Props
+) {
 
-  const products = await prisma.product.findMany({
-    where: {
-      sellerId: userId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
+  const params = await searchParams;
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="min-h-screen bg-gray-50 p-8">
+      <h1 className="text-4xl font-black uppercase italic tracking-tight text-gray-900 mb-8">
+          Mis <span className="text-4xl font-black uppercase italic tracking-tight text-blue-600">Casacas</span>
+      </h1>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">
-          Mis Productos
-        </h1>
-
+        <Link 
+          href="/dashboard"
+          className="inline-flex items-center italic uppercase gap-2 mb-6 text-gray-700 hover:text-blue-600 transition-colors font-bold">
+          ← Volver al Dashboard
+        </Link>
         <Link
           href="/dashboard/products/create"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-        >
-          Crear Producto
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 uppercase italic font-black text-white px-4 py-2 rounded-lg">
+          <PackagePlus/>
+          Agregar
         </Link>
       </div>
-
-      {products.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-gray-500">
-            No tienes productos creados.
-          </p>
+      <form className="mb-8 bg-white rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
+        <div className="grid md:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2">
+              Categoría
+            </label>
+            <select
+              name="category"
+              defaultValue={params.category || ""}
+              className="w-full rounded-2xl border border-gray-200 px-4 py-3 bg-white">
+              <option value="">
+                Todas
+              </option>
+              <option value="CLUB">
+                Club
+              </option>
+              <option value="SELECCION">
+                Selección
+              </option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2">
+              Versión
+            </label>
+            <select
+              name="version"
+              defaultValue={params.version || ""}
+              className="w-full rounded-2xl border border-gray-200 px-4 py-3 bg-white">
+              <option value="">
+                Todas
+              </option>
+              <option value="HOME">
+                Titular
+              </option>
+              <option value="AWAY">
+                Visitante
+              </option>
+              <option value="RETRO">
+                Retro
+              </option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2">
+              Equipo
+            </label>
+            <input
+              type="text"
+              name="team"
+              defaultValue={params.team || ""}
+              placeholder="Inserte el equipo."
+              className="w-full rounded-2xl border border-gray-200 px-4 py-3"/>
+          </div>
+          <div className="flex gap-4 mt-4">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-2xl py-3 font-bold transition-colors">
+              Filtrar
+            </button>
+            <a
+              href="/dashboard/products"
+              className="w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl py-3 font-bold transition-colors">
+              Limpiar
+            </a>
+          </div>
         </div>
-      ) : (
-        <div className="grid gap-4">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="bg-white rounded-lg shadow p-5 border"
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-xl font-semibold">
-                    {product.title}
-                  </h2>
-                  <p className="text-green-600 font-bold text-lg">
-                    ${product.price}
-                  </p>
-                  <p className="text-gray-600">
-                    Stock: {product.stock}
-                  </p>
-                  <p className="text-gray-600">
-                    Categoría: {product.categoryId}
-                  </p>
-                  <p className="text-gray-600">
-                    Temporada: {product.season}
-                  </p>
-                  <p className="text-gray-600">
-                    Equipo/Seleccion: {product.team}
-                  </p>
-                  <p className="text-gray-600">
-                    Tamaño: {product.size}
-                  </p>
-                  <p className="text-gray-600">
-                    Versión: {product.version}
-                  </p>
-                  <p className="text-gray-600">
-                    Descripción: {product.description}
-                  </p>
-                </div>
-
-                <div className="flex gap-2">
-                  <Link
-                    href={`/dashboard/products/${product.id}/edit`}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
-                  >
-                    Editar
-                  </Link>
-
-                  <form action={deleteProduct}>
-                    <input
-                      type="hidden"
-                      name="id"
-                      value={product.id}
-                    />
-
-                    <button
-                      type="submit"
-                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-                    >
-                      Eliminar
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      </form>
+      <Suspense
+        key={JSON.stringify(params)}
+        fallback={<ProductsGridSkeleton />}
+      >
+        <ProductsGrid
+          params={params}
+        />
+      </Suspense>
     </div>
   );
 }
