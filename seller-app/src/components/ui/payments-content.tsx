@@ -1,6 +1,7 @@
 "use client"
 
-import { DollarSign, CreditCard, Calendar, TrendingUp, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react"
+import { DollarSign, CreditCard, Calendar, TrendingUp, Clock, CheckCircle, XCircle, AlertCircle, RefreshCw } from "lucide-react"
+import Link from "next/link"
 
 const mockPayments = [
   {
@@ -110,9 +111,30 @@ export function PaymentsContent() {
   const rechazados = mockPayments.filter(p => p.estado === "Rechazado").length
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-20 pb-10 px-4">
+    <main className="min-h-screen pt-20 pb-10 px-4">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Tus Pagos</h1>
+        <div className="mb-10">
+          <h1 className="text-4xl font-black uppercase italic tracking-tight text-gray-900">
+            Tus <span className="text-blue-600">Acreditaciones</span>
+          </h1>
+
+          <p className="text-lg font-black uppercase text-gray-500 mt-2">
+            Gestioná tu historial de acreditaciones por las ventas de tus productos
+          </p>
+        </div>
+        <div className="flex items-center justify-between mb-10">
+          <Link 
+            href="/dashboard"
+            className="inline-flex items-center italic uppercase gap-2 mb-6 text-gray-700 hover:text-blue-600 transition-colors font-bold">
+            ← Volver al Dashboard
+          </Link>
+          <button
+            onClick={() => window.location.reload()}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors">
+          <RefreshCw className="w-4 h-4" />
+            Actualizar
+          </button>
+        </div>
 
         {/* Estadísticas */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
