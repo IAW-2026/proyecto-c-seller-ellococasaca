@@ -20,7 +20,7 @@ export function WelcomeHero() {
             <span className="text-blue-600">pasión</span>
           </h1>
 
-          <p className="max-w-md text-pretty text-lg leading-relaxed text-gray-500 md:text-xl">
+          <p className="max-w-md text-pretty text-lg leading-relaxed text-gray-900 md:text-xl">
             El mejor lugar para tus camisetas. Sumate a la comunidad que vive el
             fútbol como vos y mostrá tu pasión al mundo.
           </p>
