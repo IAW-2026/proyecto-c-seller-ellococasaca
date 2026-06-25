@@ -1,12 +1,19 @@
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import {
   CheckCircle,
   Clock,
   PackageCheck,
   Truck,
 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function OrdersAnalytics() {
+
+  const { userId } = await auth();
+
+  if (!userId)
+    redirect("/sign-in");
 
   const [
     pendingCount,
@@ -17,18 +24,21 @@ export default async function OrdersAnalytics() {
 
     prisma.order.count({
       where: {
+        sellerId: userId,
         status: "PENDING",
       },
     }),
 
     prisma.order.count({
       where: {
+        sellerId: userId,
         status: "PREPARED",
       },
     }),
 
     prisma.order.count({
       where: {
+        sellerId: userId,
         status: {
           in: ["SHIPPED", "IN_TRANSIT"],
         },
@@ -37,6 +47,7 @@ export default async function OrdersAnalytics() {
 
     prisma.order.count({
       where: {
+        sellerId: userId,
         status: "DELIVERED",
       },
     }),
