@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { ProductFeedback } from "@/src/mocks/feedback-product";
 
+type ProductFeedback = {
+  productId: string;
+  productName: string;
+  image: string;
+  averageRating: number;
+  totalReviews: number;
+};
 type Props = {
   product: ProductFeedback;
 };

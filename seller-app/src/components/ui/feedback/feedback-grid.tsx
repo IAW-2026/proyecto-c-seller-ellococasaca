@@ -1,5 +1,12 @@
-import { ProductFeedback } from "@/src/mocks/feedback-product";
 import FeedbackCard from "./feedback-card";
+
+type ProductFeedback = {
+  productId: string;
+  productName: string;
+  image: string;
+  averageRating: number;
+  totalReviews: number;
+};
 
 type Props = {
   products: ProductFeedback[];
@@ -11,16 +18,12 @@ export default function FeedbackGrid({
   return (
     <div className="space-y-4">
 
-      {products.map(
-        (product) => (
-          <FeedbackCard
-            key={
-              product.productId
-            }
-            product={product}
-          />
-        )
-      )}
+      {products.map((product) => (
+        <FeedbackCard
+          key={product.productId}
+          product={product}
+        />
+      ))}
 
     </div>
   );

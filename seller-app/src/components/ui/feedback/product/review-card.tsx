@@ -2,11 +2,11 @@ import { Star } from "lucide-react";
 
 type Props = {
   review: {
-    id: string;
-    buyerName: string;
+    reviewId: string;
+    buyerId: string;
     rating: number;
     comment: string;
-    createdAt: Date;
+    createdAt: string | Date;
   };
 };
 
@@ -15,17 +15,17 @@ export default function ReviewCard({
 }: Props) {
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
+    <div className="bg-white rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
 
-      <div className="flex items-start justify-between">
+      <div className="flex items-center justify-between">
 
         <div>
 
-          <h3 className="text-lg font-black uppercase italic text-gray-900">
-            {review.buyerName}
-          </h3>
+          <p className="font-black uppercase">
+            {review.buyerId}
+          </p>
 
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-gray-500">
             {new Date(
               review.createdAt
             ).toLocaleDateString(
@@ -35,34 +35,28 @@ export default function ReviewCard({
 
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex">
 
-          {Array.from({
-            length: 5,
-          }).map((_, index) => (
-
-            <Star
-              key={index}
-              className={`w-5 h-5 ${
-                index < review.rating
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "fill-gray-200 text-gray-200"
-              }`}
-            />
-
-          ))}
+          {[1, 2, 3, 4, 5].map(
+            (star) => (
+              <Star
+                key={star}
+                className={
+                  star <= review.rating
+                    ? "w-4 h-4 fill-yellow-400 text-yellow-400"
+                    : "w-4 h-4 text-gray-300"
+                }
+              />
+            )
+          )}
 
         </div>
 
       </div>
 
-      <div className="mt-4">
-
-        <p className="text-gray-700">
-          {review.comment}
-        </p>
-
-      </div>
+      <p className="mt-4 text-gray-700">
+        {review.comment}
+      </p>
 
     </div>
   );

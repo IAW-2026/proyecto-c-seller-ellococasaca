@@ -1,63 +1,71 @@
-import {
-  mockFeedbackProducts,
-} from "@/src/mocks/feedback-product";
+const FEEDBACK_API_URL =
+  process.env.FEEDBACK_API_URL;
 
-export async function getFeedbackProducts() {
-  return mockFeedbackProducts;
+export async function getSellerRating(
+  sellerId: string
+) {
+  const response = await fetch(
+    `${FEEDBACK_API_URL}/api/seller-ratings/${sellerId}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch seller rating"
+    );
+  }
+
+  return response.json();
 }
 
 export async function getProductReviews(
   productId: string,
-  page: number = 1,
-  pageSize: number = 5
+  limit: number = 5,
+  skip: number = 0
 ) {
-
-  const mockReviews = [
+  const response = await fetch(
+    `${FEEDBACK_API_URL}/api/reviews/product/${productId}?limit=${limit}&skip=${skip}`,
     {
-      id: "1",
-      buyerName: "Juan Pérez",
-      rating: 5,
-      comment: "Excelente calidad",
-      createdAt: new Date(),
-    },
+      cache: "no-store",
+    }
+  );
 
-    {
-      id: "2",
-      buyerName: "María Gómez",
-      rating: 4,
-      comment: "Muy recomendable",
-      createdAt: new Date(),
-    },
+  if (!response.ok) {
+    throw new Error(
+      "Failed to fetch product reviews"
+    );
+  }
 
-    {
-      id: "3",
-      buyerName: "Carlos López",
-      rating: 5,
-      comment: "Volvería a comprar",
-      createdAt: new Date(),
-    },
-  ];
+  return response.json();
+}
 
-  const start =
-    (page - 1) * pageSize;
+export async function getProductFeedbackSummary(
+  productId: string
+) {
+  try {
 
-  const end =
-    start + pageSize;
+    const data =
+      await getProductReviews(
+        productId,
+        1,
+        0
+      );
 
-  return {
-    reviews:
-      mockReviews.slice(
-        start,
-        end
-      ),
+    return {
+      averageRating:
+        data.averageRating ?? 0,
 
-    currentPage:
-      page,
+      totalReviews:
+        data.totalReviews ?? 0,
+    };
 
-    totalPages:
-      Math.ceil(
-        mockReviews.length /
-        pageSize
-      ),
-  };
+  } catch {
+
+    return {
+      averageRating: 0,
+      totalReviews: 0,
+    };
+  }
 }
