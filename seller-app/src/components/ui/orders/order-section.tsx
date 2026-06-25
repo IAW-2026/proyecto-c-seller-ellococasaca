@@ -4,13 +4,14 @@ import { OrderWithDetails } from "@/src/types/order";
 type Props = {
   title: string;
   orders: OrderWithDetails[];
+  quantity: number
   totalPages: number;
   currentPage: number;
   pageParam: string;
 };
 
 export default function OrderSection(
-  { title, orders, totalPages, currentPage, pageParam }: Props
+  { title, orders, quantity, totalPages, currentPage, pageParam }: Props
 ) {
 
   return (
@@ -23,7 +24,7 @@ export default function OrderSection(
         </h2>
 
         <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-sm font-black">
-          {orders.length}
+          {quantity}
         </span>
 
       </div>

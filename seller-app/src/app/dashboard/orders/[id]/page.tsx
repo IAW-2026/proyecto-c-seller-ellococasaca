@@ -13,8 +13,10 @@ export default async function OrderPage(
   const { id } = await params;
 
   return (
-    <OrderDetail
-      id={id}
-    />
+    <main>
+      <OrderDetail
+        id={id}
+      />
+    </main>
   );
 }

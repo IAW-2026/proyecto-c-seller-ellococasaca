@@ -14,6 +14,8 @@ export default function OrderSummary(
       (acc, detail) => acc + detail.quantity,
       0
     );
+  
+  const shortId = order.buyerId.slice(0, 8);
 
   return (
     <div className="bg-white rounded-3xl shadow-xl shadow-blue-900/5 overflow-hidden">
@@ -37,13 +39,13 @@ export default function OrderSummary(
             <div className="flex items-center gap-2 mb-2">
               <User className="w-5 h-5 text-blue-600" />
 
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                 Comprador
               </p>
             </div>
 
             <p className="text-xl font-black text-gray-900">
-              {order.buyerId}
+              {shortId}...
             </p>
           </div>
 
@@ -52,7 +54,7 @@ export default function OrderSummary(
             <div className="flex items-center gap-2 mb-2">
               <CalendarDays className="w-5 h-5 text-blue-600" />
 
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                 Fecha
               </p>
             </div>
@@ -67,7 +69,7 @@ export default function OrderSummary(
             <div className="flex items-center gap-2 mb-2">
               <Package className="w-5 h-5 text-blue-600" />
 
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                 Productos
               </p>
             </div>
@@ -79,7 +81,7 @@ export default function OrderSummary(
 
           {/* Total */}
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600 mb-2">
               Total
             </p>
 

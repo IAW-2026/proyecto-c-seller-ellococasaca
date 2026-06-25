@@ -6,7 +6,7 @@ import FeedbackGridSkeleton from "@/src/components/ui/feedback/feedback-grid-ske
 
 export default function FeedbacksPage() {
   return (
-    <main className="min-h-screen pt-20 pb-10 px-4">
+    <main className="min-h-screen bg-gray-100 pt-20 pb-10 px-4">
 
       <div className="max-w-5xl mx-auto">
 
