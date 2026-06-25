@@ -11,14 +11,26 @@ export async function prepareOrder(
     where: {
       id: orderId,
     },
-
     data: {
       status: "PREPARED",
     },
   });
 
-  //Revalidate paths.
-  revalidatePath("/dashboard/orders");
-  revalidatePath(`/dashboard/orders/${orderId}`);
+  //SHIPPING INTEGRATION
+  /*
+  await fetch(
+    `${process.env.SHIPPING_API_URL}/api/shipments/${orderId}/ready`,
+    {
+      method: "PATCH",
+    }
+  );
+  */
 
+  revalidatePath(
+    "/dashboard/orders"
+  );
+
+  revalidatePath(
+    `/dashboard/orders/${orderId}`
+  );
 }

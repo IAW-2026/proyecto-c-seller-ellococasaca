@@ -18,10 +18,10 @@ function StatCard({
     <div className="bg-white rounded-xl p-6 shadow-xl shadow-blue-900/5">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] font-black text-gray-400">{title}</p>
+          <p className="text-xs uppercase tracking-[0.25em] font-black text-gray-600">{title}</p>
           <p className="text-3xl font-bold font-black text-gray-900 mt-1">{value}</p>
           {trend && (
-            <p className={`text-xs uppercase mt-1 flex items-center gap-1 ${trendUp ? 'text-green-600' : 'text-red-500'}`}>
+            <p className={`text-xs uppercase mt-1 flex items-center gap-1 ${trendUp ? 'text-green-700' : 'text-red-600'}`}>
               <TrendingUp className={`w-3 h-3 ${!trendUp && 'rotate-180'}`} />
               {trend}
             </p>
@@ -63,7 +63,7 @@ function QuickActionCard({
       <h3 className={`font-semibold ${primary ? 'text-white' : 'text-gray-900'}`}>
         {title}
       </h3>
-      <p className={`text-sm mt-1 ${primary ? 'text-blue-100' : 'text-gray-500'}`}>
+      <p className={`text-sm mt-1 ${primary ? 'text-white/90' : 'text-gray-600'}`}>
         {description}
       </p>
     </Link>
@@ -98,12 +98,12 @@ function RecentOrderItem({
         </div>
         <div>
           <p className="text-sm font-medium text-gray-900">{product}</p>
-          <p className="text-xs text-gray-500">Pedido #{id}</p>
+          <p className="text-xs text-gray-600">Pedido #{id}</p>
         </div>
       </div>
       <div className="text-right">
         <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>
-        <p className="text-xs text-gray-400">{date}</p>
+        <p className="text-xs text-gray-500">{date}</p>
       </div>
     </div>
   )
@@ -114,13 +114,13 @@ export function DashboardContent() {
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Welcome Section */}
       <div className="mb-10 bg-blue-600 rounded-[2.5rem] p-10 text-white shadow-xl shadow-blue-900/10">
-        <p className="text-sm uppercase tracking-[0.3em] font-black text-blue-200">
+        <p className="text-sm uppercase tracking-[0.3em] font-black text-white">
           BIENVENIDO DE VUELTA
         </p>
         <h1 className="mt-2 text-5xl font-black uppercase italic tracking-tight">
           VESTÍ TU PASIÓN
         </h1>
-        <p className="mt-4 text-lg text-blue-100 max-w-2xl">
+        <p className="mt-4 text-lg text-white/90 max-w-2xl">
           Gestioná tu catálogo, ventas y pedidos desde un único lugar.
         </p>
         <Link
@@ -188,72 +188,6 @@ export function DashboardContent() {
             icon={Truck}
             href="/dashboard/orders"
           />
-        </div>
-      </div>
-
-      {/* Recent Orders & Alerts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl p-6 shadow-xl shadow-blue-900/5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Pedidos Recientes</h2>
-            <Link href="dashboard/orders" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-              Ver todos
-            </Link>
-          </div>
-          <div className="divide-y divide-gray-100">
-            <RecentOrderItem 
-              id="1234"
-              product="Camiseta Negra Classic"
-              status="pending"
-              date="Hace 2 horas"
-            />
-            <RecentOrderItem 
-              id="1233"
-              product="Camiseta Blanca Premium"
-              status="shipped"
-              date="Ayer"
-            />
-            <RecentOrderItem 
-              id="1232"
-              product="Pack x3 Basicas"
-              status="delivered"
-              date="Hace 2 dias"
-            />
-            <RecentOrderItem 
-              id="1231"
-              product="Camiseta Estampada"
-              status="delivered"
-              date="Hace 3 dias"
-            />
-          </div>
-        </div>
-
-        {/* Alerts */}
-        <div className="bg-white rounded-xl p-6 shadow-xl shadow-blue-900/5">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Alertas y Notificaciones</h2>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg">
-              <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-yellow-800">Stock bajo</p>
-                <p className="text-xs text-yellow-700">Camiseta Negra Classic tiene solo 3 unidades</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
-              <Star className="w-5 h-5 text-blue-600 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-blue-800">Nueva resena</p>
-                <p className="text-xs text-blue-700">Recibiste una resena de 5 estrellas</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
-              <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-green-800">Pedido completado</p>
-                <p className="text-xs text-green-700">El pedido #1232 fue entregado exitosamente</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </main>

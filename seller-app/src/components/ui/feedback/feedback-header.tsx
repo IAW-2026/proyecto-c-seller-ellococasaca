@@ -13,7 +13,7 @@ export function FeedbackHeader() {
           Tus <span className="text-blue-600">Reseñas</span>
         </h1>
 
-        <p className="text-lg font-black uppercase text-gray-500 mt-2">
+        <p className="text-lg font-black uppercase text-gray-600 mt-2">
           Gestioná todas las reseñas de tus casacas
         </p>
       </div>

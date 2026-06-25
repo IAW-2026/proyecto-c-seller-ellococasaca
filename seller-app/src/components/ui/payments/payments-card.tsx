@@ -75,7 +75,7 @@ export default function PaymentCard({
         <div className="flex items-center justify-between">
 
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
               Orden
             </p>
 

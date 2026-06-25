@@ -115,7 +115,7 @@ export default function OrderCard(
             </p>
 
             <div className="mt-5">
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                 Productos
               </p>
 
@@ -142,7 +142,7 @@ export default function OrderCard(
             <div className="mt-5 flex gap-12">
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                   Productos
                 </p>
 
@@ -152,7 +152,7 @@ export default function OrderCard(
               </div>
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                   Fecha
                 </p>
 
@@ -162,7 +162,7 @@ export default function OrderCard(
               </div>
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                   Total
                 </p>
 

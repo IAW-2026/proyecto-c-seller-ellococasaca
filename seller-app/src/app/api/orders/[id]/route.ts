@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 const VALID_STATUSES = [
+  "PREPARED",
   "SHIPPED",
   "IN_TRANSIT",
   "DELIVERED",
