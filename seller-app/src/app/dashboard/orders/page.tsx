@@ -21,7 +21,7 @@ export default async function OrdersPage(
   const params = await searchParams;
 
   return (
-    <main className="min-h-screen mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="min-h-screen bg-gray-100 mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <OrdersHeader />
       <Suspense
           fallback={<OrdersAnalyticsSkeleton />}

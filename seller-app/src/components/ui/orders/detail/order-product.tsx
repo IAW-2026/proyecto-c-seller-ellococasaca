@@ -24,6 +24,8 @@ export default function OrderProduct(
             }
             alt={product.title}
             fill
+            priority
+            sizes="180px"
             className="object-cover"
           />
         </div>
@@ -32,14 +34,14 @@ export default function OrderProduct(
         <div className="flex flex-col justify-between">
 
           <div>
-            <h3 className="text-3xl font-black uppercase italic tracking-tight text-gray-900">
+            <h1 className="text-3xl font-black uppercase italic tracking-tight text-gray-900">
               {product.title}
-            </h3>
+            </h1>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                   Equipo
                 </p>
 
@@ -49,7 +51,7 @@ export default function OrderProduct(
               </div>
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                   Temporada
                 </p>
 
@@ -59,7 +61,7 @@ export default function OrderProduct(
               </div>
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                   Talle
                 </p>
 
@@ -69,7 +71,7 @@ export default function OrderProduct(
               </div>
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                   Versión
                 </p>
 
@@ -85,7 +87,7 @@ export default function OrderProduct(
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
 
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                 Cantidad
               </p>
 
@@ -95,7 +97,7 @@ export default function OrderProduct(
             </div>
 
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                 Precio unitario
               </p>
 
@@ -105,7 +107,7 @@ export default function OrderProduct(
             </div>
 
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                 Subtotal
               </p>
 

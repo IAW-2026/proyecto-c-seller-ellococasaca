@@ -37,7 +37,7 @@ export default function FeedbackCard({
   product,
 }: Props) {
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
+    <div className="bg-white rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-400">
 
       <div className="flex items-center justify-between">
 
@@ -53,9 +53,9 @@ export default function FeedbackCard({
 
           <div>
 
-            <h3 className="text-2xl font-black uppercase italic">
+            <h1 className="text-2xl font-black uppercase italic">
               {product.productName}
-            </h3>
+            </h1>
 
             {product.totalReviews > 0 ? (
               <>
@@ -77,14 +77,14 @@ export default function FeedbackCard({
                     )}
                   </span>
 
-                  <span className="text-gray-500 uppercase">
+                  <span className="text-black uppercase">
                     {product.totalReviews} reseñas
                   </span>
 
                 </div>
               </>
             ) : (
-              <p className="mt-2 text-gray-400 font-bold uppercase italic">
+              <p className="mt-2 text-gray-600 font-bold uppercase italic">
                 Sin valoraciones todavía
               </p>
             )}
@@ -101,7 +101,7 @@ export default function FeedbackCard({
             Ver reseñas
           </Link>
         ) : (
-          <span className="text-gray-400 font-bold uppercase italic">
+          <span className="text-gray-600 font-bold uppercase italic">
             Sin reseñas
           </span>
         )}

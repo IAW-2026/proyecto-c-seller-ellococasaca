@@ -24,7 +24,8 @@ export default async function ProductPage(
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
+        <main>
+            <div className="min-h-screen bg-gray-100 p-8">
             <div className="flex items-center justify-between mb-6">
                 <Link 
                     href="/dashboard/products"
@@ -39,7 +40,7 @@ export default async function ProductPage(
                 </Link>
             </div>
             <div
-                className="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl shadow-blue-900/5 overflow-hidden">
+                className="max-w-6xl mx-auto bg-white border border-gray-500 rounded-3xl shadow-xl shadow-blue-900/5 overflow-hidden">
                 <div className="grid md:grid-cols-2 gap-8 p-8">
                     {/* Product image */}
                     <div>
@@ -52,6 +53,8 @@ export default async function ProductPage(
                         alt={product.title}
                         width={800}
                         height={800}
+                        priority
+                        fetchPriority="high"
                         className="object-cover"
                         />
                     </div>
@@ -65,7 +68,7 @@ export default async function ProductPage(
                         </p>
                         <div className="grid grid-cols-2 gap-6 space-y-2 text-gray-700">
                             <div>
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                                     Stock
                                 </p>
                                 <p className="mt-1 text-xl font-black text-gray-900">
@@ -73,7 +76,7 @@ export default async function ProductPage(
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                                     Team
                                 </p>
                                 <p className="mt-1 text-xl font-black text-gray-900">
@@ -81,7 +84,7 @@ export default async function ProductPage(
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                                     Season
                                 </p>
                                 <p className="mt-1 text-xl font-black text-gray-900">
@@ -89,7 +92,7 @@ export default async function ProductPage(
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                                     Size
                                 </p>
                                 <p className=" mt-1 text-xl font-black text-gray-900">
@@ -97,7 +100,7 @@ export default async function ProductPage(
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                                     Category
                                 </p>
                                 <p className="mt-1 text-xl font-black text-gray-900">
@@ -105,7 +108,7 @@ export default async function ProductPage(
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                                     Versión
                                 </p>
                                 <p className="inline-block w-fit bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-black uppercase tracking-[0.25em]">
@@ -115,7 +118,7 @@ export default async function ProductPage(
                         </div>
                         <div className="mt-4">
                             <div>
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-600">
                                     Descripción
                                 </p>
                                 <p className="mt-1 text-xl font-black text-gray-900">
@@ -128,5 +131,6 @@ export default async function ProductPage(
                 </div>
             </div>
         </div>
+        </main>
     );
 }

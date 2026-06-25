@@ -118,7 +118,9 @@ export default function CreateProductForm() {
             </div>
             {/* Versión */}
             <div className="space-y-3">
-              <label className="text-medium font-black uppercase tracking-[0.25em] text-black">
+              <label 
+                htmlFor="version"
+                className="text-medium font-black uppercase tracking-[0.25em] text-black">
                 Versión <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -230,7 +232,7 @@ export default function CreateProductForm() {
         <div className="space-y-3">
           <label htmlFor="images">
             <label className="text-medium font-black uppercase tracking-[0.25em] text-black">Imágen del producto</label> 
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-xl hover:-translate-y-0.5 shadow-blue-900/5 p-6">
+            <div className="bg-white rounded-3xl border border-gray-500 shadow-xl hover:-translate-y-0.5 shadow-blue-900/5 p-6">
               <div className="aspect-square rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
                 {/* TODO: Put "multiple" on imput to manage multiple images */}
                 <input
@@ -268,7 +270,7 @@ export default function CreateProductForm() {
                       Arrastra imágenes o haz click para subir
                     </p>
 
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-gray-600 text-sm mt-1">
                       PNG, JPG, WEBP hasta 10MB
                     </p>
                   </>
@@ -280,7 +282,7 @@ export default function CreateProductForm() {
       </div>
         
       <div className="flex items-center justify-between pt-6">
-        <p className="text-medium font-medium text-red-500">
+        <p className="inline-block bg-red-600 text-white px-3 py-1 rounded-full font-black uppercase">
           <span className="text-red-500 font-bold">*</span> IMPORTANTE: Los campos marcados con * son OBLIGATORIOS.
         </p>
         <div className="flex gap-3">

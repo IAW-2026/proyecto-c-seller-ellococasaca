@@ -93,9 +93,11 @@ export default async function FeedbackContent() {
         }
       />
 
-      <FeedbackGrid
-        products={sortedProducts}
-      />
+      <div className="mt-8">
+        <FeedbackGrid
+          products={sortedProducts}
+        />
+      </div>
     </>
   );
 }

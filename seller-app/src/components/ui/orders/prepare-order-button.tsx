@@ -22,7 +22,7 @@ export default function PrepareOrderButton(
           await prepareOrder(orderId);
         })
       }
-      className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50"
+      className="bg-green-700 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50"
     >
       {isPending
         ? "Preparando..."
