@@ -19,7 +19,8 @@ export default async function ProductsPage(
 
   const params = await searchParams;
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <main>
+      <div className="min-h-screen bg-gray-50 p-8">
       <h1 className="text-4xl font-black uppercase italic tracking-tight text-gray-900 mb-8">
           Mis <span className="text-4xl font-black uppercase italic tracking-tight text-blue-600">Casacas</span>
       </h1>
@@ -36,18 +37,21 @@ export default async function ProductsPage(
           Agregar
         </Link>
       </div>
-      <form className="mb-8 bg-white rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
+      <form className="mb-8 bg-white rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-500">
         <div className="grid md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2">
+            <label 
+              htmlFor="category"
+              className="block text-xs font-black uppercase tracking-[0.25em] text-gray-600 mb-2">
               Categoría
             </label>
             <select
+              id="category"
               name="category"
               defaultValue={params.category || ""}
               className="w-full rounded-2xl border border-gray-200 px-4 py-3 bg-white">
               <option value="">
-                Todas
+                Elegir categoría
               </option>
               <option value="CLUB">
                 Club
@@ -58,15 +62,18 @@ export default async function ProductsPage(
             </select>
           </div>
           <div>
-            <label className="block text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2">
+            <label 
+              htmlFor="version"
+              className="block text-xs font-black uppercase tracking-[0.25em] text-gray-600 mb-2">
               Versión
             </label>
             <select
+              id="version"
               name="version"
               defaultValue={params.version || ""}
               className="w-full rounded-2xl border border-gray-200 px-4 py-3 bg-white">
               <option value="">
-                Todas
+                Elegir versión
               </option>
               <option value="HOME">
                 Titular
@@ -80,7 +87,7 @@ export default async function ProductsPage(
             </select>
           </div>
           <div>
-            <label className="block text-xs font-black uppercase tracking-[0.25em] text-gray-400 mb-2">
+            <label className="block text-xs font-black uppercase tracking-[0.25em] text-gray-600 mb-2">
               Equipo
             </label>
             <input
@@ -113,5 +120,6 @@ export default async function ProductsPage(
         />
       </Suspense>
     </div>
+    </main>
   );
 }

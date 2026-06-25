@@ -22,11 +22,13 @@ export default async function EditProductPage({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-          <h1 className="text-4xl font-black uppercase italic tracking-tight text-gray-900 mb-8">
-            Editar <span className="text-4xl font-black uppercase italic tracking-tight text-blue-600">Casaca</span>
-          </h1>
-          <EditProductForm product={product} />
-    </div>
+    <main>
+      <div className="flex flex-col bg-gray-100 items-center justify-center min-h-screen py-2">
+        <h1 className="text-4xl font-black uppercase italic tracking-tight text-gray-900 mb-8">
+          Editar <span className="text-4xl font-black uppercase italic tracking-tight text-blue-600">Casaca</span>
+        </h1>
+        <EditProductForm product={product} />
+      </div>
+    </main>
   );
 }

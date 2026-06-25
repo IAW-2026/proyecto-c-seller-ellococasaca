@@ -216,6 +216,7 @@ export default async function OrdersGrid(
             <OrderSection
               title="A preparar"
               orders={pending}
+              quantity={pendingCount}
               totalPages={pendingPages}
               currentPage={pendingPage}
               pageParam="pendingPage"
@@ -224,6 +225,7 @@ export default async function OrdersGrid(
             <OrderSection
               title="Preparados"
               orders={prepared}
+              quantity={preparedCount}
               totalPages={preparedPages}
               currentPage={preparedPage}
               pageParam="preparedPage"
@@ -232,6 +234,7 @@ export default async function OrdersGrid(
             <OrderSection
               title="En tránsito"
               orders={transit}
+              quantity={transitCount}
               totalPages={transitPages}
               currentPage={transitPage}
               pageParam="transitPage"
@@ -240,6 +243,7 @@ export default async function OrdersGrid(
             <OrderSection
               title="Entregados"
               orders={delivered}
+              quantity={deliveredCount}
               totalPages={deliveredPages}
               currentPage={deliveredPage}
               pageParam="deliveredPage"

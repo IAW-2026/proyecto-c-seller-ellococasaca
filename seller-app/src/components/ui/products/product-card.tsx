@@ -37,10 +37,10 @@ export default function ProductCard({
       <div className={`rounded-3xl shadow-xl shadow-blue-900/5 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-900/10
           ${
             outOfStock
-              ? "bg-red-50 border-2 border-red-300"
+              ? "bg-red-50 border-2 border-red-500"
               : lowStock
-                ? "bg-yellow-50 border-2 border-yellow-300"
-                : "bg-white border border-gray-100"
+                ? "bg-yellow-50 border-2 border-yellow-500"
+                : "bg-white border border-gray-500"
           }
         `}>
         <div className="p-6">
@@ -85,7 +85,7 @@ export default function ProductCard({
 
             {lowStock && (
               <div className="mt-3">
-                <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-black uppercase">
+                <span className="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-black uppercase">
                   Poco Stock
                 </span>
               </div>
@@ -94,9 +94,9 @@ export default function ProductCard({
             <p className={`mt-4 text-1xl font-black uppercase italic tracking-tight
                 ${
                   outOfStock
-                    ? "text-red-600"
+                    ? "inline-block bg-red-500 text-white px-3 py-1 rounded-full font-black uppercase"
                     : lowStock
-                      ? "text-yellow-600"
+                      ? "inline-block bg-yellow-500 text-black px-3 py-1 rounded-full font-black uppercase"
                       : "text-gray-500"
                 }
               `}
@@ -115,18 +115,19 @@ export default function ProductCard({
 
           <div className="flex justify-center gap-3 mt-6">
             <Link
+              aria-label={`Editar ${product.title}`}
               href={`/dashboard/products/${product.id}/edit`}
-              className="bg-blue-600 text-white rounded-2xl px-4 py-3 font-bold text-sm text-center hover:bg-blue-700 transition-colors"
+              className="bg-blue-600 text-white flex items-center rounded-2xl px-4 py-3 font-bold text-sm text-center hover:bg-blue-700 transition-colors"
             >
-              <Pencil />
+              Editar <Pencil />
             </Link>
 
             <button
               type="button"
               onClick={() => setOpenModal(true)}
-              className="bg-red-50 text-red-600 border border-red-200 rounded-2xl px-4 py-3 font-bold text-sm hover:bg-red-600 hover:text-white transition-colors"
+              className="bg-red-600 text-white flex items-center border border-red-200 rounded-2xl px-4 py-3 font-bold text-sm hover:bg-red-700 hover:text-white transition-colors"
             >
-              <Trash2 />
+              Eliminar <Trash2 />
             </button>
           </div>
         </div>

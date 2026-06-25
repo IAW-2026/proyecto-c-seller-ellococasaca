@@ -23,7 +23,7 @@ Aplicación web desarrollada con **Next.js** para la gestión de productos de ve
 7. Ingresar a la aplicación.
 
 ## ACLARACIONES IMPORTANTES:
-Dentro de la carpeta **seller-app**, ver el documento **CONSIDERACIONES.md** para conocer las distintas limitaciones del proyecto.
+Dentro de la carpeta **seller-app**, ver el documento **CONSIDERACIONES.md** para conocer las distintas actualizaciones del proyecto en relación a la Entrega 2.
 
 ## CREDENCIALES
 - Link de la aplicación: https://proyecto-c-seller-ellococasaca.vercel.app/

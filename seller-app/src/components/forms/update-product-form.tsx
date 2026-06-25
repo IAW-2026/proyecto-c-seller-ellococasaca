@@ -149,7 +149,8 @@ export default function EditProductForm({ product }: EditProductFormProps) {
             </div>
             {/* Versión */}
             <div className="space-y-3">
-              <label className="text-medium font-black uppercase tracking-[0.25em] text-black">
+              <label htmlFor="version" 
+                className="text-medium font-black uppercase tracking-[0.25em] text-black">
                 Versión <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -264,9 +265,9 @@ export default function EditProductForm({ product }: EditProductFormProps) {
         <div className="space-y-3">
           <label htmlFor="images">
             <label className="text-medium font-black uppercase tracking-[0.25em] text-black">Imágen del producto</label> 
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-xl hover:-translate-y-0.5 shadow-blue-900/5 p-6">
+            <div className="bg-white rounded-3xl border border-gray-500 shadow-xl hover:-translate-y-0.5 shadow-blue-900/5 p-6">
               <div className="space-y-4">
-                <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                <p className="text-xs text-gray-700 font-black uppercase tracking-[0.25em] text-gray-400">
                   Imagen actual
                 </p>
                 <div className="relative aspect-square overflow-hidden rounded-2xl border border-gray-200">
@@ -305,11 +306,11 @@ export default function EditProductForm({ product }: EditProductFormProps) {
                       );
                     }}
                   />
-                  <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                  <Upload className="w-8 h-8 text-gray-500 mb-2" />
                   <p className="font-semibold text-gray-700">
                     Cambiar imagen
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-gray-700">
                     PNG, JPG, WEBP hasta 10MB
                   </p>
                 </label>
@@ -320,7 +321,7 @@ export default function EditProductForm({ product }: EditProductFormProps) {
       </div>
         
       <div className="flex items-center justify-between pt-6">
-        <p className="text-medium font-medium text-red-500">
+        <p className="inline-block bg-red-600 text-white px-3 py-1 rounded-full font-black uppercase">
           <span className="text-red-500 font-bold">*</span> IMPORTANTE: Los campos marcados con * son OBLIGATORIOS.
         </p>
         <div className="flex gap-3">
