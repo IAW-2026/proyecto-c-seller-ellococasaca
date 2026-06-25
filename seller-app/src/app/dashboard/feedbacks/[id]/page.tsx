@@ -1,6 +1,4 @@
-import { Suspense } from "react";
-
-import ReviewsContent from "@/src/components/ui/feedback/product/reviews-content";
+import ReviewContent from "@/src/components/ui/feedback/product/reviews-content";
 
 type Props = {
   params: Promise<{
@@ -28,7 +26,7 @@ export default async function ProductReviewsPage({
 
   return (
     <main className="min-h-screen">
-        <ReviewsContent
+        <ReviewContent
           productId={productId}
           page={page}
         />

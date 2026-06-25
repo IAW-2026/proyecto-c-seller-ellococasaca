@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { ProductSchema, ProductState } from "@/src/lib/schemas";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadImage } from "./upload-images";

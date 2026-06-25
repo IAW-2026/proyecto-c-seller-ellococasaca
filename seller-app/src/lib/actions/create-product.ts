@@ -15,6 +15,7 @@ export async function createProduct(prevState: ProductState, formData: FormData)
     throw new Error("Unauthorized");
   }
 
+  //IMPORTANT - Used only for second validations.
   const clerkUser = await currentUser();
 
   if (!clerkUser) {
