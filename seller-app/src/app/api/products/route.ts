@@ -1,18 +1,47 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-
+export async function GET(
+  request: NextRequest
+) {
   try {
+
+    const searchParams =
+      request.nextUrl.searchParams;
+
+    const kind =
+      searchParams.get("kind");
+
+    const teamId =
+      searchParams.get("teamId");
+
+    const whereClause: any = {
+      stock: {
+        gt: 0,
+      },
+    };
+
+    if (kind) {
+      whereClause.categoryId =
+        kind.toUpperCase();
+    }
+
+    if (teamId) {
+
+      const normalizedTeam =
+        teamId
+          .replace(/-/g, " ")
+          .toLowerCase();
+
+      whereClause.team = {
+        equals: normalizedTeam,
+        mode: "insensitive",
+      };
+    }
 
     const products =
       await prisma.product.findMany({
-
-        where: {
-          stock: {
-            gt: 0,
-          },
-        },
+        where: whereClause,
 
         include: {
           ProductImage: true,
@@ -25,9 +54,7 @@ export async function GET() {
 
     return NextResponse.json(
       products,
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
 
   } catch (error) {
