@@ -33,12 +33,24 @@ export async function getProductReviews(
   );
 
   if (!response.ok) {
-    throw new Error(
-      "Failed to fetch product reviews"
-    );
+    throw new Error("Failed to fetch product reviews");
   }
 
-  return response.json();
+  const data = await response.json();
+
+  const take = Number(data.take ?? limit);
+  const currentSkip = Number(data.skip ?? skip);
+  const totalReviews = Number(data.totalReviews ?? 0);
+
+  return {
+    ...data,
+    reviews: Array.isArray(data.reviews) ? data.reviews : [],
+    currentPage: take > 0 ? Math.floor(currentSkip / take) + 1 : 1,
+    totalPages:
+      take > 0 && totalReviews > 0
+        ? Math.max(1, Math.ceil(totalReviews / take))
+        : 1,
+  };
 }
 
 export async function getProductFeedbackSummary(

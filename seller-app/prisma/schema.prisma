@@ -39,14 +39,15 @@ model ProductImage {
 }
 
 model Order {
-  id           String        @id @default(uuid())
-  buyerId      String
-  sellerId     String
-  Seller       User          @relation(fields: [sellerId], references: [clerkId])
-  totalPrice   Float
-  status       OrderStatus   @default(PENDING)
-  createdAt    DateTime      @default(now())
-  OrderDetails OrderDetail[]
+  id              String        @id @default(uuid())
+  externalOrderId String?       @unique
+  buyerId         String
+  sellerId        String
+  Seller          User          @relation(fields: [sellerId], references: [clerkId])
+  totalPrice      Float
+  status          OrderStatus   @default(PENDING)
+  createdAt       DateTime      @default(now())
+  OrderDetails    OrderDetail[]
 }
 
 model OrderDetail {
