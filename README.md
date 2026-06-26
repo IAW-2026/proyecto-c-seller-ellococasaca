@@ -30,3 +30,5 @@ Dentro de la carpeta **seller-app**, ver el documento **CONSIDERACIONES.md** par
 - Las credencial del usuario vendedor fue creada acorde a lo especificado en los requisitos: 
 - Usuario: seller+clerk_test@iaw.com
 - Passowrd: iawuser#
+- Usuario 2: seller2+clerk_test@iaw.com
+- Password: iawuser#

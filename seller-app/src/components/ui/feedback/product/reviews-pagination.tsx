@@ -17,7 +17,7 @@ export default function ReviewPagination({
   }
 
   return (
-    <div className="flex justify-center gap-2 mt-8">
+    <div className="flex bg-gray-100 justify-center gap-2 mt-8">
 
       {Array.from(
         {
