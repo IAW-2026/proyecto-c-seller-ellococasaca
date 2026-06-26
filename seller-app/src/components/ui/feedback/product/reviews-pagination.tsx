@@ -31,8 +31,7 @@ export default function ReviewPagination({
           return (
             <Link
               key={page}
-              href={`/dashboard/feedback/${productId}?page=${page}`}
-              className={`px-4 py-2 rounded-xl font-bold transition-colors ${
+              href={`/dashboard/feedbacks/${productId}?page=${page}`}              className={`px-4 py-2 rounded-xl font-bold transition-colors ${
                 page === currentPage
                   ? "bg-blue-600 text-white"
                   : "bg-white text-gray-700 hover:bg-gray-100"

@@ -27,12 +27,25 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const page = Number(searchParams.get("page") ?? "1");
-    const limit = Math.min(50, Number(searchParams.get("limit") ?? "20"));
+
+    const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
+    const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit") ?? "20")));
     const skip = (page - 1) * limit;
+
+    const sellerId =
+      searchParams.get("sellerId")?.trim() ||
+      searchParams.get("seller")?.trim() ||
+      undefined;
+
+    const where = sellerId
+      ? {
+          sellerId,
+        }
+      : undefined;
 
     const [products, total] = await Promise.all([
       prisma.product.findMany({
+        where,
         select: {
           id: true,
           title: true,
@@ -58,7 +71,9 @@ export async function GET(request: Request) {
         skip,
         take: limit,
       }),
-      prisma.product.count(),
+      prisma.product.count({
+        where,
+      }),
     ]);
 
     return NextResponse.json({

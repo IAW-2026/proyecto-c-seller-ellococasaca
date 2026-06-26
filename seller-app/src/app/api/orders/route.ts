@@ -9,20 +9,32 @@ type OrderItem = {
 export async function POST(
   request: Request
 ) {
-
   try {
-
     const body = await request.json();
 
+    console.log("BODY RECIBIDO:", body);
     const {
+      orderId,
       buyerId,
       items,
     }: {
+      orderId: string;
       buyerId: string;
       items: OrderItem[];
     } = body;
 
-    //Basic validations.
+    // Basic validations.
+    if (!orderId) {
+      return NextResponse.json(
+        {
+          error: "orderId is required.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
     if (!buyerId) {
       return NextResponse.json(
         {
@@ -37,7 +49,8 @@ export async function POST(
     if (!items || items.length === 0) {
       return NextResponse.json(
         {
-          error: "Order must contain at least one item.",
+          error:
+            "Order must contain at least one item.",
         },
         {
           status: 400,
@@ -45,20 +58,43 @@ export async function POST(
       );
     }
 
-    const products = await prisma.product.findMany({
-      where: {
-        id: {
-          in: items.map(
-            (item) => item.productId
-          ),
+    const existingOrder =
+      await prisma.order.findUnique({
+        where: {
+          externalOrderId: orderId,
         },
-      },
-    });
+      });
 
-    if (products.length !== items.length) {
+    if (existingOrder) {
       return NextResponse.json(
         {
-          error: "One or more products do not exist.",
+          error:
+            "Order already exists.",
+        },
+        {
+          status: 409,
+        }
+      );
+    }
+
+    const products =
+      await prisma.product.findMany({
+        where: {
+          id: {
+            in: items.map(
+              (item) => item.productId
+            ),
+          },
+        },
+      });
+
+    if (
+      products.length !== items.length
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "One or more products do not exist.",
         },
         {
           status: 400,
@@ -67,7 +103,6 @@ export async function POST(
     }
 
     for (const item of items) {
-      //Validate quantity.
       if (item.quantity <= 0) {
         return NextResponse.json(
           {
@@ -79,17 +114,21 @@ export async function POST(
           }
         );
       }
+
       const product =
         products.find(
-          (p) => p.id === item.productId
+          (p) =>
+            p.id === item.productId
         );
 
       if (!product) {
         continue;
       }
 
-      if (product.stock < item.quantity) {
-
+      if (
+        product.stock <
+        item.quantity
+      ) {
         return NextResponse.json(
           {
             error:
@@ -102,18 +141,23 @@ export async function POST(
       }
     }
 
-    //Get seller.
-    const sellerId = products[0].sellerId;
+    // Get seller.
+    const sellerId =
+      products[0].sellerId;
 
-    //Validate all products are from the same seller.
-    const sameSeller = products.every(
-      (product) => product.sellerId === sellerId
-    );
+    // Validate all products are from same seller.
+    const sameSeller =
+      products.every(
+        (product) =>
+          product.sellerId ===
+          sellerId
+      );
 
     if (!sameSeller) {
       return NextResponse.json(
         {
-          error: "All products must belong to the same seller.",
+          error:
+            "All products must belong to the same seller.",
         },
         {
           status: 400,
@@ -121,13 +165,14 @@ export async function POST(
       );
     }
 
-    //Map all the details for the order.
+    // Map order details.
     const orderDetails =
       items.map((item) => {
-
         const product =
           products.find(
-            (p) => p.id === item.productId
+            (p) =>
+              p.id ===
+              item.productId
           );
 
         if (!product) {
@@ -140,31 +185,36 @@ export async function POST(
           product.price;
 
         const totalPrice =
-          unitPrice * item.quantity;
+          unitPrice *
+          item.quantity;
 
         return {
-          productId: item.productId,
-          quantity: item.quantity,
+          productId:
+            item.productId,
+          quantity:
+            item.quantity,
           unitPrice,
           totalPrice,
         };
-    });
+      });
 
-    //Calculate total price for order.
+    // Calculate total order.
     const orderTotal =
       orderDetails.reduce(
         (acc, item) =>
-          acc + item.totalPrice,
+          acc +
+          item.totalPrice,
         0
       );
 
-    //Create order and details in one transaction.
+      console.log({
+        externalOrderId: orderId,
+      });
+    // Create order + details.
     const order =
       await prisma.$transaction(
         async (tx) => {
-
           for (const item of items) {
-
             await tx.product.update({
               where: {
                 id: item.productId,
@@ -181,25 +231,38 @@ export async function POST(
 
           return tx.order.create({
             data: {
+              externalOrderId:
+                orderId,
+
               buyerId,
               sellerId,
-              totalPrice: orderTotal,
-              status: "PENDING",
+
+              totalPrice:
+                orderTotal,
+
+              status:
+                "PENDING",
 
               OrderDetails: {
-                create: orderDetails.map(
-                  (detail) => ({
-                    Product: {
-                      connect: {
-                        id: detail.productId,
+                create:
+                  orderDetails.map(
+                    (detail) => ({
+                      Product: {
+                        connect: {
+                          id: detail.productId,
+                        },
                       },
-                    },
 
-                    quantity: detail.quantity,
-                    unitPrice: detail.unitPrice,
-                    totalPrice: detail.totalPrice,
-                  })
-                ),
+                      quantity:
+                        detail.quantity,
+
+                      unitPrice:
+                        detail.unitPrice,
+
+                      totalPrice:
+                        detail.totalPrice,
+                    })
+                  ),
               },
             },
 
@@ -219,9 +282,7 @@ export async function POST(
         status: 201,
       }
     );
-
   } catch (error) {
-
     console.error(
       "[CREATE_ORDER_ERROR]",
       error
@@ -229,7 +290,8 @@ export async function POST(
 
     return NextResponse.json(
       {
-        error: "Internal server error.",
+        error:
+          "Internal server error.",
       },
       {
         status: 500,

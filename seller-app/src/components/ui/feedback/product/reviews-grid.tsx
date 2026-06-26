@@ -52,7 +52,7 @@ export default function ReviewGrid({
       <div className="flex items-center justify-between mb-8">
 
         <Link
-          href="/dashboard/feedback"
+          href="/dashboard/feedbacks"
           className="inline-flex items-center italic uppercase gap-2 text-gray-700 hover:text-blue-600 font-bold"
         >
           ← Volver

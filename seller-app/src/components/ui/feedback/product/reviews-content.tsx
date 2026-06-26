@@ -16,13 +16,10 @@ export default async function ReviewContent({
 }: Props) {
 
   const PAGE_SIZE = 5;
+  const safePage = Number.isNaN(page) || page < 1 ? 1 : page;
+  const skip = (safePage - 1) * PAGE_SIZE;
 
-  const data =
-    await getProductReviews(
-      productId,
-      page,
-      PAGE_SIZE
-    );
+  const data = await getProductReviews(productId, PAGE_SIZE, skip);
 
   return (
     <>
