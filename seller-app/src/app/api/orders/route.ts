@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 type OrderItem = {
@@ -10,9 +11,17 @@ export async function POST(
   request: Request
 ) {
   try {
+
+  const { userId } = await auth();
+    
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
     const body = await request.json();
 
-    console.log("BODY RECIBIDO:", body);
     const {
       orderId,
       buyerId,
