@@ -37,7 +37,7 @@ export async function getProductReviews(
   }
 
   const data = await response.json();
-
+  console.log(data);
   const take = Number(data.take ?? limit);
   const currentSkip = Number(data.skip ?? skip);
   const totalReviews = Number(data.totalReviews ?? 0);

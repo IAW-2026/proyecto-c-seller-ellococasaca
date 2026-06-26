@@ -14,18 +14,20 @@ export default function ReviewCard({
   review,
 }: Props) {
 
+  const shortId = review.buyerId.slice(0,8);
+
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
+    <div className="bg-white border border-gray-500 rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
 
       <div className="flex items-center justify-between">
 
         <div>
 
           <p className="font-black uppercase">
-            {review.buyerId}
+            {shortId}...
           </p>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             {new Date(
               review.createdAt
             ).toLocaleDateString(
