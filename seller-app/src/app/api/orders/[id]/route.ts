@@ -10,23 +10,31 @@ const VALID_STATUSES = [
 
 export async function PATCH(
   request: Request,
-  { params }: {
-    params: Promise<{ id: string }>
+  {
+    params,
+  }: {
+    params: Promise<{
+      id: string;
+    }>;
   }
 ) {
-
   try {
-
     const { id } = await params;
 
-    const body = await request.json();
+    const body =
+      await request.json();
 
     const { status } = body;
 
-    if (!VALID_STATUSES.includes(status)) {
+    if (
+      !VALID_STATUSES.includes(
+        status
+      )
+    ) {
       return NextResponse.json(
         {
-          error: "Invalid status.",
+          error:
+            "Invalid status.",
         },
         {
           status: 400,
@@ -37,7 +45,7 @@ export async function PATCH(
     const order =
       await prisma.order.update({
         where: {
-          id,
+          externalOrderId: id,
         },
 
         data: {
@@ -49,11 +57,12 @@ export async function PATCH(
       {
         success: true,
         order,
+      },
+      {
+        status: 200,
       }
     );
-
   } catch (error) {
-
     console.error(
       "[UPDATE_ORDER_STATUS]",
       error
@@ -61,7 +70,8 @@ export async function PATCH(
 
     return NextResponse.json(
       {
-        error: "Internal server error.",
+        error:
+          "Internal server error.",
       },
       {
         status: 500,
