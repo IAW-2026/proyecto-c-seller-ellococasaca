@@ -2,7 +2,7 @@ import ReviewContent from "@/src/components/ui/feedback/product/reviews-content"
 
 type Props = {
   params: Promise<{
-    productId: string;
+    id: string;
   }>;
 
   searchParams?: Promise<{
@@ -15,19 +15,19 @@ export default async function ProductReviewsPage({
   searchParams,
 }: Props) {
 
-  const { productId } =
+  const { id } =
     await params;
-
+  
   const page =
     Number(
       (await searchParams)?.page ??
       "1"
     );
-
+    
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-gray-100">
         <ReviewContent
-          productId={productId}
+          productId={id}
           page={page}
         />
     </main>

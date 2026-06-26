@@ -26,7 +26,7 @@ export default function ReviewGrid({
     <>
       <div className="mb-10">
 
-        <h1 className="text-4xl font-black uppercase italic tracking-tight text-gray-900">
+        <h1 className="text-4xl bg-gray-100 font-black uppercase italic tracking-tight text-gray-900">
           Reseñas del
           <span className="text-blue-600">
             {" "}Producto
@@ -41,7 +41,7 @@ export default function ReviewGrid({
             {averageRating.toFixed(1)}
           </span>
 
-          <span className="text-gray-500 uppercase font-bold">
+          <span className="text-gray-600 uppercase font-bold">
             {totalReviews} reseñas
           </span>
 
