@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { OrderStatus } from "@prisma/client";
 
@@ -13,36 +12,47 @@ const statuses: OrderStatus[] = [
 
 export async function GET(request: Request) {
   try {
-    const { userId } = await auth();
+    // -------------------------
+    // AUTH (INTER-SERVICE ONLY)
+    // -------------------------
+    const secret = process.env.INTER_SERVICE_SECRET;
+    const secretHeader = request.headers.get("x-inter-service-secret");
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!secret || secretHeader !== secret) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // -------------------------
+    // QUERY PARAMS
+    // -------------------------
     const { searchParams } = new URL(request.url);
     const days = Number(searchParams.get("days") ?? "30");
+    const sellerId = searchParams.get("sellerId")?.trim() || undefined;
 
     const since = new Date();
     since.setDate(since.getDate() - days);
 
+    // -------------------------
+    // BASE FILTERS
+    // -------------------------
+    const ordersWhere = {
+      createdAt: { gte: since },
+      ...(sellerId ? { sellerId } : {}),
+    };
+
+    // -------------------------
+    // QUERIES
+    // -------------------------
     const [
       orders,
       revenueAgg,
       statusCounts,
       totalProducts,
       lowStockProducts,
-      activeSellers,
+      activeSellersCount,
     ] = await Promise.all([
       prisma.order.findMany({
-        where: {
-          sellerId: userId,
-          createdAt: {
-            gte: since,
-          },
-        },
+        where: ordersWhere,
         include: {
           OrderDetails: {
             include: {
@@ -55,45 +65,27 @@ export async function GET(request: Request) {
             },
           },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: { createdAt: "desc" },
       }),
 
       prisma.order.aggregate({
-        where: {
-          sellerId: userId,
-        },
-        _sum: {
-          totalPrice: true,
-        },
-        _count: {
-          _all: true,
-        },
+        where: ordersWhere,
+        _sum: { totalPrice: true },
+        _count: { _all: true },
       }),
 
       prisma.order.groupBy({
         by: ["status"],
-        where: {
-          sellerId: userId,
-        },
-        _count: {
-          _all: true,
-        },
+        where: ordersWhere,
+        _count: { _all: true },
       }),
 
-      prisma.product.count({
-        where: {
-          sellerId: userId,
-        },
-      }),
+      // PRODUCTS (GLOBAL - no seller dependency assumed)
+      prisma.product.count(),
 
       prisma.product.findMany({
         where: {
-          sellerId: userId,
-          stock: {
-            lte: 5,
-          },
+          stock: { lte: 5 },
         },
         select: {
           id: true,
@@ -101,18 +93,29 @@ export async function GET(request: Request) {
         },
       }),
 
+      // ACTIVE SELLERS (users with orders in period)
       prisma.user.count({
         where: {
-          clerkId: userId,
+          orders: {
+            some: {
+              createdAt: { gte: since },
+            },
+          },
         },
       }),
     ]);
 
+    // -------------------------
+    // METRICS
+    // -------------------------
     const totalRevenue = revenueAgg._sum.totalPrice ?? 0;
     const totalOrders = revenueAgg._count._all ?? 0;
 
     const statusMap = new Map<OrderStatus, number>(
-      statusCounts.map((item) => [item.status as OrderStatus, item._count._all])
+      statusCounts.map((item) => [
+        item.status as OrderStatus,
+        item._count._all,
+      ])
     );
 
     const statusBreakdown = statuses.map((status) => ({
@@ -123,6 +126,20 @@ export async function GET(request: Request) {
     const pendingOrders = statusMap.get("PENDING") ?? 0;
     const deliveredOrders = statusMap.get("DELIVERED") ?? 0;
 
+    const completedRevenue = orders.reduce(
+      (acc, order) =>
+        order.status === "DELIVERED"
+          ? acc + order.totalPrice
+          : acc,
+      0
+    );
+
+    const averageOrderValue =
+      totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+    // -------------------------
+    // SALES TREND (7 DAYS)
+    // -------------------------
     const salesTrend = Array.from({ length: 7 }, (_, index) => {
       const day = new Date();
       day.setHours(0, 0, 0, 0);
@@ -133,16 +150,23 @@ export async function GET(request: Request) {
       end.setHours(23, 59, 59, 999);
 
       const dayOrders = orders.filter(
-        (order) => order.createdAt >= start && order.createdAt <= end
+        (order) =>
+          order.createdAt >= start && order.createdAt <= end
       );
 
       return {
         date: day.toISOString().split("T")[0],
         orders: dayOrders.length,
-        revenue: dayOrders.reduce((acc, order) => acc + order.totalPrice, 0),
+        revenue: dayOrders.reduce(
+          (acc, order) => acc + order.totalPrice,
+          0
+        ),
       };
     });
 
+    // -------------------------
+    // TOP PRODUCTS
+    // -------------------------
     const topProductsMap = new Map<
       string,
       { id: string; title: string; unitsSold: number; revenue: number }
@@ -151,7 +175,6 @@ export async function GET(request: Request) {
     orders.forEach((order) => {
       order.OrderDetails.forEach((detail) => {
         const product = detail.Product;
-
         if (!product) return;
 
         const existing = topProductsMap.get(product.id) ?? {
@@ -169,20 +192,20 @@ export async function GET(request: Request) {
     });
 
     const topProducts = Array.from(topProductsMap.values())
-      .sort((a, b) => b.unitsSold - a.unitsSold || b.revenue - a.revenue)
+      .sort(
+        (a, b) =>
+          b.unitsSold - a.unitsSold || b.revenue - a.revenue
+      )
       .slice(0, 5);
 
-    const completedRevenue =
-      orders
-        .filter((order) => order.status === "DELIVERED")
-        .reduce((acc, order) => acc + order.totalPrice, 0);
-
-    const averageOrderValue =
-      totalOrders > 0 ? totalRevenue / totalOrders : 0;
-
+    // -------------------------
+    // RESPONSE
+    // -------------------------
     return NextResponse.json({
       success: true,
       rangeDays: days,
+      scope: sellerId ? { sellerId } : { global: true },
+
       summary: {
         totalOrders,
         totalRevenue,
@@ -192,8 +215,9 @@ export async function GET(request: Request) {
         averageOrderValue,
         totalProducts,
         lowStockProducts: lowStockProducts.length,
-        activeSellers: activeSellers,
+        activeSellers: activeSellersCount,
       },
+
       statusBreakdown,
       salesTrend,
       topProducts,

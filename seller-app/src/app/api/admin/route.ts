@@ -5,6 +5,17 @@ import { OrderStatus } from "@prisma/client";
 
 export async function GET(request: Request) {
   try {
+
+    const secret = process.env.INTER_SERVICE_SECRET;
+    const secretHeader = request.headers.get("x-inter-service-secret");
+
+    if (!secret || secretHeader !== secret) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
     const { userId } = await auth();
 
     if (!userId) {
