@@ -10,7 +10,16 @@ export async function POST(
   request: Request
 ) {
   try {
-    
+    const secret = process.env.INTER_SERVICE_SECRET;
+    const secretHeader = request.headers.get("x-inter-service-secret");
+
+    if (!secret || secretHeader !== secret) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json();
 
     const {
