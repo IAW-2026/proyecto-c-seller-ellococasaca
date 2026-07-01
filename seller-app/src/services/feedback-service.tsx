@@ -32,6 +32,10 @@ export async function getProductReviews(
   const response = await fetch(
     `${FEEDBACK_API_URL}/api/reviews/product/${productId}?limit=${limit}&skip=${skip}`,
     {
+      headers: {
+        "x-inter-service-secret":
+          process.env.INTER_SERVICE_SECRET ?? "",
+      },
       cache: "no-store",
     }
   );
