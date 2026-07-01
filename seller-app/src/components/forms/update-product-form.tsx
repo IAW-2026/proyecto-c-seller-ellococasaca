@@ -66,7 +66,7 @@ export default function EditProductForm({ product }: EditProductFormProps) {
                 name="title"
                 placeholder="Ingrese el título del producto."
                 defaultValue={product.title}
-                onChange={(e) => handleImputChange(e, /^[a-zA-Z0-9\s/]*$/)}
+                onChange={(e) => handleImputChange(e, /^[\p{L}0-9\s/]*$/u)}
                 required
                 className="w-full h-12 px-4 rounded-2xl border-gray-200 bg-white focus:border-blue-500 focus:ring-blue-500"
               />
@@ -206,7 +206,7 @@ export default function EditProductForm({ product }: EditProductFormProps) {
                   name="team"
                   placeholder="Ingrese el nombre del equipo/selección del producto."
                   defaultValue={product.team ?? ""}
-                  onChange={(e) => handleImputChange(e, /^[a-zA-Z0-9\s]*$/)}
+                  onChange={(e) => handleImputChange(e, /^[\p{L}0-9\s/]*$/u)}
                   required
                   className="w-full h-12 px-4 rounded-2xl border-gray-200 bg-white focus:border-blue-500 focus:ring-blue-500"
                 />

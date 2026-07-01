@@ -5,21 +5,23 @@ export async function getSellerRating(
   sellerId: string
 ) {
   const response = await fetch(
-    `${FEEDBACK_API_URL}/api/seller-ratings/${sellerId}`,
-    {
-      headers: {
-        "x-inter-service-secret":
-          process.env.INTER_SERVICE_SECRET ?? "",
-      },
-      cache: "no-store",
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      "Failed to fetch seller rating"
-    );
+  `${FEEDBACK_API_URL}/api/seller-ratings/${sellerId}`,
+  {
+    headers: {
+      "x-inter-service-secret":
+        process.env.INTER_SERVICE_SECRET ?? "",
+    },
+    cache: "no-store",
   }
+);
+
+if (!response.ok) {
+  const body = await response.text();
+
+  throw new Error(
+    `Failed to fetch seller rating. Status: ${response.status}. Body: ${body}`
+  );
+}
 
   return response.json();
 }
