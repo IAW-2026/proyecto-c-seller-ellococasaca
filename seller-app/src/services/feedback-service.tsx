@@ -7,6 +7,10 @@ export async function getSellerRating(
   const response = await fetch(
     `${FEEDBACK_API_URL}/api/seller-ratings/${sellerId}`,
     {
+      headers: {
+        "x-inter-service-secret":
+          process.env.INTER_SERVICE_SECRET ?? "",
+      },
       cache: "no-store",
     }
   );
