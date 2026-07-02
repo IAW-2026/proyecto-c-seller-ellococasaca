@@ -1,20 +1,29 @@
+import { auth } from "@clerk/nextjs/server";
+
 const FEEDBACK_API_URL =
   process.env.FEEDBACK_API_URL;
 
 export async function getSellerRating(
   sellerId: string
 ) {
-  const response = await fetch(
-  `${FEEDBACK_API_URL}/api/seller-ratings/${sellerId}`,
-  {
-    headers: {
-      "x-inter-service-secret":
-        process.env.INTER_SERVICE_SECRET ?? "",
-    },
-    cache: "no-store",
-  }
-);
+  const { getToken } = await auth();
+  const token = await getToken();
 
+  const response = await fetch(
+    `${FEEDBACK_API_URL}/api/seller-ratings/${sellerId}`,
+    {
+      headers: {
+        ...(token ?  { "Authorization": `Bearer ${token}` } : {}),
+        "x-inter-service-secret":
+          process.env.INTER_SERVICE_SECRET ?? "",
+      },
+      cache: "no-store",
+    }
+  );
+
+  console.log(response);
+  console.log(process.env.FEEDBACK_API_URL);
+  console.log("x-inter-service-secret", process.env.INTER_SERVICE_SECRET);
 if (!response.ok) {
   const body = await response.text();
 
@@ -31,10 +40,14 @@ export async function getProductReviews(
   limit: number = 5,
   skip: number = 0
 ) {
+  const { getToken } = await auth();
+  const token = await getToken();
+
   const response = await fetch(
     `${FEEDBACK_API_URL}/api/reviews/product/${productId}?limit=${limit}&skip=${skip}`,
     {
       headers: {
+        ...(token ?  { "Authorization": `Bearer ${token}` } : {}),
         "x-inter-service-secret":
           process.env.INTER_SERVICE_SECRET ?? "",
       },
