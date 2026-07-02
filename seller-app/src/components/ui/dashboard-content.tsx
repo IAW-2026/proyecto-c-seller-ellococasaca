@@ -1,5 +1,9 @@
 import { Package, Star, Truck, TrendingUp, DollarSign, ShoppingBag, PackagePlus, Clock, CheckCircle, AlertCircle } from "lucide-react"
 import Link from "next/link"
+import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { getSellerRating } from "@/src/services/feedback-service";
 
 function StatCard({ 
   title, 
@@ -109,7 +113,63 @@ function RecentOrderItem({
   )
 }
 
-export function DashboardContent() {
+export async function DashboardContent() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  const [
+    productsCount,
+    pendingOrders,
+    monthlySales,
+    sellerRating,
+  ] = await Promise.all([
+    prisma.product.count({
+      where: {
+        sellerId: userId,
+      },
+    }),
+
+    prisma.order.count({
+      where: {
+        sellerId: userId,
+        status: "PENDING",
+      },
+    }),
+
+    prisma.order.aggregate({
+      where: {
+        sellerId: userId,
+        createdAt: {
+          gte: startOfMonth,
+        },
+      },
+
+      _sum: {
+        totalPrice: true,
+      },
+    }),
+
+    getSellerRating(userId),
+  ]);
+
+  const salesData = await prisma.order.aggregate({
+    where: {
+      sellerId: userId,
+    },
+
+    _sum: {
+      totalPrice: true,
+    },
+  });
+
+  const totalSales = salesData._sum.totalPrice ?? 0;
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Welcome Section */}
@@ -133,34 +193,31 @@ export function DashboardContent() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard 
-          title="Ventas del Mes" 
-          value="$12,450" 
+
+        <StatCard
+          title="Ventas Totales"
+          value={`$${totalSales.toLocaleString("es-AR")}`}
           icon={DollarSign}
-          trend="+12.5% vs mes anterior"
-          trendUp
         />
-        <StatCard 
-          title="Productos Activos" 
-          value="24" 
+
+        <StatCard
+          title="Productos Activos"
+          value={productsCount.toString()}
           icon={Package}
-          trend="+3 nuevos"
-          trendUp
         />
-        <StatCard 
-          title="Pedidos Pendientes" 
-          value="8" 
+
+        <StatCard
+          title="Pedidos Pendientes"
+          value={pendingOrders.toString()}
           icon={ShoppingBag}
-          trend="+2 nuevos"
-          trendUp
         />
-        <StatCard 
-          title="Calificacion Promedio" 
-          value="4.8" 
+
+        <StatCard
+          title="Calificación Promedio"
+          value={sellerRating.averageRating.toFixed(1)}
           icon={Star}
-          trend="+0.2 este mes"
-          trendUp
         />
+
       </div>
 
       {/* Quick Actions */}

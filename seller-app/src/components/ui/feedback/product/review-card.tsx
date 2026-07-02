@@ -14,51 +14,52 @@ export default function ReviewCard({
   review,
 }: Props) {
 
-  const shortId = review.buyerId.slice(0,8);
+  const shortId =
+    review.buyerId.slice(0, 8);
 
   return (
-    <div className="bg-white border border-gray-500 rounded-3xl p-6 shadow-xl shadow-blue-900/5 border border-gray-100">
+    <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-xl shadow-blue-900/5">
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between">
 
         <div>
 
-          <p className="font-black uppercase">
-            {shortId}...
+          <p className="font-black uppercase text-gray-900">
+            Cliente {shortId}...
           </p>
 
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-500 mt-1">
             {new Date(
               review.createdAt
-            ).toLocaleDateString(
-              "es-AR"
-            )}
+            ).toLocaleDateString("es-AR")}
           </p>
 
         </div>
 
-        <div className="flex">
+        <div className="flex gap-1">
 
-          {[1, 2, 3, 4, 5].map(
-            (star) => (
-              <Star
-                key={star}
-                className={
-                  star <= review.rating
-                    ? "w-4 h-4 fill-yellow-400 text-yellow-400"
-                    : "w-4 h-4 text-gray-300"
-                }
-              />
-            )
-          )}
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star
+              key={star}
+              className={
+                star <= review.rating
+                  ? "w-5 h-5 fill-yellow-400 text-yellow-400"
+                  : "w-5 h-5 text-gray-300"
+              }
+            />
+          ))}
 
         </div>
 
       </div>
 
-      <p className="mt-4 text-gray-700">
-        {review.comment}
-      </p>
+      <div className="mt-5 border-t border-gray-100 pt-5">
+
+        <p className="text-gray-700 leading-relaxed">
+          {review.comment}
+        </p>
+
+      </div>
 
     </div>
   );
