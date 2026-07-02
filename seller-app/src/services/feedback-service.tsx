@@ -21,15 +21,8 @@ export async function getSellerRating(
     }
   );
 
-  console.log(response);
-  console.log(process.env.FEEDBACK_API_URL);
-  console.log("x-inter-service-secret", process.env.INTER_SERVICE_SECRET);
 if (!response.ok) {
-  const body = await response.text();
-
-  throw new Error(
-    `Failed to fetch seller rating. Status: ${response.status}. Body: ${body}`
-  );
+  throw new Error("Failed to fetch seller rating.");
 }
 
   return response.json();
@@ -60,7 +53,6 @@ export async function getProductReviews(
   }
 
   const data = await response.json();
-  console.log(data);
   const take = Number(data.take ?? limit);
   const currentSkip = Number(data.skip ?? skip);
   const totalReviews = Number(data.totalReviews ?? 0);

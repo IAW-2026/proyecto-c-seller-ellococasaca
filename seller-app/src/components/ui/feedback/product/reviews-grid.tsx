@@ -1,9 +1,12 @@
+import Link from "next/link";
+import Image from "next/image";
+import { Star } from "lucide-react";
 import ReviewCard from "./review-card";
 
-import Link from "next/link";
-import { Star } from "lucide-react";
-
 type Props = {
+  productName: string;
+  productImage: string;
+
   averageRating: number;
   totalReviews: number;
 
@@ -17,62 +20,89 @@ type Props = {
 };
 
 export default function ReviewGrid({
+  productName,
+  productImage,
   averageRating,
   totalReviews,
   reviews,
 }: Props) {
-
   return (
     <>
-      <div className="mb-10">
+      <Link
+        href="/dashboard/feedbacks"
+        className="inline-flex items-center gap-2 mb-6 text-gray-700 hover:text-blue-600 font-bold uppercase italic"
+      >
+        ← Volver
+      </Link>
 
-        <h1 className="text-4xl bg-gray-100 font-black uppercase italic tracking-tight text-gray-900">
-          Reseñas del
-          <span className="text-blue-600">
-            {" "}Producto
-          </span>
-        </h1>
+      <div className="bg-white rounded-3xl border border-gray-200 shadow-xl shadow-blue-900/5 p-8 mb-10">
+        <div className="flex flex-col md:flex-row gap-8 items-center">
 
-        <div className="flex items-center gap-3 mt-4">
+          <div className="relative w-40 h-40 rounded-3xl overflow-hidden bg-gray-100">
+            <Image
+              src={productImage}
+              alt={productName}
+              fill
+              className="object-cover"
+            />
+          </div>
 
-          <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+          <div className="flex-1">
 
-          <span className="text-2xl font-black text-blue-600">
-            {averageRating.toFixed(1)}
-          </span>
+            <p className="text-xs uppercase tracking-[0.3em] font-black text-gray-700">
+              Producto
+            </p>
 
-          <span className="text-gray-600 uppercase font-bold">
-            {totalReviews} reseñas
-          </span>
+            <h1 className="text-5xl font-black uppercase italic tracking-tight text-gray-900 mt-2">
+              {productName}
+            </h1>
+
+            <div className="flex items-center gap-4 mt-6">
+
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={
+                      star <= Math.round(averageRating)
+                        ? "w-6 h-6 fill-yellow-400 text-yellow-400"
+                        : "w-6 h-6 text-gray-300"
+                    }
+                  />
+                ))}
+              </div>
+
+              <span className="text-3xl font-black text-blue-600">
+                {averageRating.toFixed(1)}
+              </span>
+
+              <span className="uppercase font-bold text-gray-700">
+                {totalReviews} reseñas
+              </span>
+
+            </div>
+
+          </div>
 
         </div>
-
       </div>
 
-      <div className="flex items-center justify-between mb-8">
-
-        <Link
-          href="/dashboard/feedbacks"
-          className="inline-flex items-center italic uppercase gap-2 text-gray-700 hover:text-blue-600 font-bold"
-        >
-          ← Volver
-        </Link>
-
+      <div className="mb-6">
+        <h2 className="text-3xl font-black uppercase italic tracking-tight text-gray-900">
+          Tus <span className="text-blue-700">Reviews</span>
+        </h2>
+        <p className="text-lg font-black uppercase text-gray-600 mt-2">
+          Gestioná todas las reviews de tus casacas y conocé la opinión de tus clientes
+        </p>
       </div>
 
       <div className="space-y-4">
-
-        {reviews.map(
-          (review) => (
-            <ReviewCard
-              key={
-                review.reviewId
-              }
-              review={review}
-            />
-          )
-        )}
-
+        {reviews.map((review) => (
+          <ReviewCard
+            key={review.reviewId}
+            review={review}
+          />
+        ))}
       </div>
     </>
   );
